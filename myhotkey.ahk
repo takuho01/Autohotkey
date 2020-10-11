@@ -1,4 +1,9 @@
 
+global mode:=0
+
+
+; in all mode
+
 ;...
 ^G::send {BS}
 
@@ -32,9 +37,17 @@ vk1C::Send ^#{Right}
 vk1D & f::Send #{Tab}
 
 
-; vscode
-#if WinActive("ahk_exe Code.exe")
 
+#if mode = 0 
+#if
+
+#if mode = 1
+#if
+
+
+; vscode
+#if (WinActive("ahk_exe Code.exe"))
+#if
 
 ;２連続入力に対応
 ; ~i up::
