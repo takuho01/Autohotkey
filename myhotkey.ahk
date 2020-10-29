@@ -1,7 +1,6 @@
 
 global mode:=0
 
-
 ; in all mode
 
 ;...
@@ -36,14 +35,27 @@ vk1D::Send ^#{Left}
 vk1C::Send ^#{Right}
 vk1D & f::Send #{Tab}
 
-
+~j up::
+  Input, jout, J T0.1 V L1, {j}
+  if(ErrorLevel == "EndKey:J"){
+    SendInput, {BackSpace 2}
+    mode = 1
+  }
+Return
 
 #if mode = 0 
 #if
 
 #if mode = 1
+j::Send {Down}
+k::Send {Up}
+l::Send {Right}
+h::Send {Left}
+g::Send {BackSpace}
+i::
+    mode = 0
+    return
 #if
-
 
 ; vscode
 #if (WinActive("ahk_exe Code.exe"))
