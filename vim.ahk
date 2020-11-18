@@ -89,12 +89,8 @@ return
 #if (mode = APP_MAIN_MODE)
 
 ;; 新規作成、削除
-n::
-    ; Send, {End}
-    ; Send, {Enter}
-    ; ChangeNomalMainMode()
-b::
-    ; Send, ^+k
+x::
+    Send,{BS} 
 return
 
 ;; コピー、貼り付け、切り取り、元に戻す
@@ -108,18 +104,8 @@ v::
     Send, {Esc}
     atom_cursor_mode := ATOM_MOVING_TEXT_MODE
 return
-x::
-    Send, ^x
-    Send, {Esc}
-    atom_cursor_mode := ATOM_MOVING_TEXT_MODE
-return
 z::
     Send, ^z
-return
-
-;; 前を消す、後ろを消す
-g:: 
-    Send, {BS}
 return
 
 i::
@@ -206,6 +192,35 @@ return
 
 ;;;; 選択モードでは連続してshift + 移動キーを送り続きるが、次のキーを押下したときに
 ;;;; shiftが入りっぱなしになる問題が発生したため、暫定対応として以下のキーを無視する。
+
+a::
+; b::
+; c::
+; d::
+; e::
+; f::
+g::
+; h::
+; i::
+; j::
+; k::
+; l::
+m::
+; n::
+o::
+p::
+q::
+r::
+; s::
+t::
+u::
+; v::
+w::
+; x::
+y::
+; z::
+
+
 +i::return
 +k::return
 +j::return
@@ -214,6 +229,9 @@ return
 +d::return
 +s::return
 +f::return
+
+
+
 
 ~-::
 ~^::
@@ -275,7 +293,7 @@ return
 ;; インサートモード
 ;;----------------------------------------------------
 #if (mode = NOMAL_MAIN_MODE)
-    ;...
+    
 ^G::send {BS}
 #^+G::send {Del}
 ^N::send {Enter}
@@ -306,9 +324,17 @@ return
 ^+Left::Send +{Home}
 ^+Right::Send +{End}
 
-~j up::
-  Input, jout, I T0.1 V L1, {j}
-  if(ErrorLevel == "EndKey:J"){
+; ~j up::
+;   Input, jout, I T0.1 V L1, {j}
+;   if(ErrorLevel == "EndKey:J"){
+;     SendInput, {BackSpace 2}
+;     ChangeAppMainMode()
+;   }
+; Return
+
+~j::
+  Input, jout, I T0.3 V L1, {k}
+  if(ErrorLevel == "EndKey:K"){
     SendInput, {BackSpace 2}
     ChangeAppMainMode()
   }
