@@ -3,7 +3,7 @@ global mode:=0
 
 ; in all mode
 
-;...
+;
 ^G::send {BS}
 
 ;cursol move 
