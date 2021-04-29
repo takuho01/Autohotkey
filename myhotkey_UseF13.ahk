@@ -6,9 +6,9 @@
 ;---
 F13 & q::send {Blind}^q
 F13 & w::send {Blind}^w
-F13 & e::send {Blind}^e
-F13 & r::send {Blind}^r
-F13 & t::send {Blind}^t
+; F13 & e::send {Blind}^e
+; F13 & r::send {Blind}^r
+; F13 & t::send {Blind}^t
 F13 & y::send {Blind}^y
 F13 & u::send {Blind}^u
 ; F13 & i::send {Blind}^i
@@ -51,6 +51,7 @@ F13 & Space::send {Blind}^{Space}
 ;---
 
 F13 & G::send {BS}
+F13 & e::send {Esc}
 
 ;cursol move 
 F13 & K::send {Blind}{Up}
@@ -73,9 +74,62 @@ vk1D::Send ^#{Left}
 vk1C::Send ^#{Right}
 ; +vk1C::Send {PgUp}
 
+
 ; vscode
 #if WinActive("ahk_exe Code.exe")
 
+#IfWinActive
+    
+    
+#if WinActive("ahk_exe ApplicationFrameHost.exe")
+; microsoft whitboard
+F13 & t:: 
+    send {Esc}
+    Sleep, 100.0
+    send {Esc}
+    Sleep, 100.0
+    send {Esc}
+    Sleep, 100.0
+    send {Esc}
+    Sleep, 100.0
+    send +{F10}
+    Sleep, 100.0
+    send {Right}
+    Sleep, 100.0
+    send {Right}
+    Sleep, 100.0
+    send {Right}
+    Sleep, 100.0
+    send {Enter}
+    Return
+
+F13 & r:: 
+    send {Esc}
+    Sleep, 100.0 
+    send {Esc}
+    Sleep, 100.0
+    send {Esc}
+    Sleep, 100.0
+    send {Esc}
+    Sleep, 100.0
+    send +{F10}
+    Sleep, 100.0
+    send {Right}
+    Sleep, 100.0
+    send {Right}
+    Sleep, 100.0
+    send {Right}
+    Sleep, 100.0
+    send {Right}
+    Sleep, 100.0
+    send {Enter}
+    Return
+
+F13 & Enter::send {Esc}
+; Enter::send {Esc}
+; +Enter::send {Enter}
+
+#IfWinActive
 
 ;２連続入力に対応
 ; ~i up::
