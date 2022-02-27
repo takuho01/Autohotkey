@@ -218,7 +218,7 @@ return
             send +i
             send ^{Enter} 
         }else {
-            send ^x{Down}{Up}{Up}^v
+            send ^x{Down}{Up}{Up}{Up}{Up}{Up}{Up}^v
         }
     }else{
         Send !{Enter} 
@@ -241,7 +241,7 @@ enter::
             send +d
             send ^{Enter} 
         }else {
-            send ^x{Down}{Up}{Down}^v
+            send ^x{Down}{Up}{Down}{Down}{Down}{Down}{Down}^v
         }
     }else if (emode = LineSelectMode){
         send ^x{Down}{Up}{Down}^v
@@ -268,7 +268,7 @@ Tab::
     }else if (emode = InsertMode){
         send {Tab}{Right}{Left} 
     }else if (emode = SelectMode){
-        send ^x{Down}{Up}{Right}^v
+        send ^x{Down}{Up}{Right}{Right}{Right}{Right}{Right}^v
     }else{
         send {Tab}
     }
@@ -280,7 +280,7 @@ return
     }else if (emode = InsertMode){
         send +{Tab}{Right}{Left} 
     }else if (emode = SelectMode){
-        send ^x{Down}{Up}{Left}^v
+        send ^x{Down}{Up}{Left}{Left}{Left}{Left}{Left}^v
     }else{
         send +{Tab}
     }
@@ -297,6 +297,11 @@ return
 v::
     if (emode = CommandMode) {
         emode := SelectMode 
+        VisualCnt := 0
+    }else if (emode = SelectMode){
+        VisualCnt := VisualCnt + 1
+        send +{Right}+{Right}
+        send +{Down}+{Down}
     }else{
         send v 
     }
@@ -541,6 +546,49 @@ l::
     }
 return
 
+F13 & h::
+    if (emode = CommandMode) {
+        send ^x{Down}{Up}{Left}^v
+    }else if (emode = SelectMode){
+        send ^x{Down}{Up}{Left}^v
+    }else if (emode = LineSelectMode){
+    }else{
+        send {Left}
+    }
+return
+
+F13 & j::
+    if (emode = CommandMode) {
+        send ^x{Down}{Up}{Down}^v
+    }else if (emode = SelectMode){
+        send ^x{Down}{Up}{Down}^v
+    }else if (emode = LineSelectMode){
+    }else{
+        send {Down}
+    }
+return
+
+F13 & k::
+    if (emode = CommandMode) {
+        send ^x{Down}{Up}{Up}^v
+    }else if (emode = SelectMode){
+        send ^x{Down}{Up}{Up}^v
+    }else if (emode = LineSelectMode){
+    }else{
+        send {Up}
+    }
+return
+
+F13 & l::
+    if (emode = CommandMode) {
+        send ^x{Down}{Up}{Right}^v
+    }else if (emode = SelectMode){
+        send ^x{Down}{Up}{Right}^v
+    }else if (emode = LineSelectMode){
+    }else{
+        send {Right}
+    }
+return
 
 +h::
     if (emode = CommandMode) {
@@ -557,7 +605,7 @@ return
             send +{Left}
             SpaceCnt := 0 
         }else{
-            send +{Left}+{Left}+{Left}+{Left}+{Left}
+            send +{Left}
         }
     }else if (emode = LineSelectMode){
         if (SpaceCnt = 1){
@@ -588,7 +636,7 @@ return
             send +{Down}
             SpaceCnt := 0 
         }else{
-            send +{Down}+{Down}+{Down}+{Down}+{Down}
+            send +{Down}
         }
     }else if (emode = LineSelectMode){
         if (SpaceCnt = 1){
@@ -619,7 +667,7 @@ return
             send +{Up}
             SpaceCnt := 0 
         }else{
-            send +{Up}+{Up}+{Up}+{Up}+{Up}
+            send +{Up}
         }
     }else if (emode = LineSelectMode){
         if (SpaceCnt = 1){
@@ -650,7 +698,7 @@ return
             send +{Right}
             SpaceCnt := 0 
         }else{
-            send +{Right}+{Right}+{Right}+{Right}+{Right}
+            send +{Right}
         }
     }else if (emode = LineSelectMode){
         if (SpaceCnt = 1){
