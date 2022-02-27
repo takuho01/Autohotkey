@@ -12,8 +12,8 @@ global CommandMode := 0
 global InsertMode := 1 
 global SelectMode := 2 
 global LineSelectMode := 3 
-global NomalCopy := 1 
-global LineSelectCopy := 2
+global NormalCopy := 0 
+global LineSelectCopy :=1 
 
 ; ↓のコードよりも先にF13 & xのコードを書くとよくわからんエラーが出る。
 ; 解決は難しかったので放置。
@@ -213,7 +213,13 @@ return
     if (emode = CommandMode) {
         Send !{Enter} 
     }else if (emode = SelectMode){
-        send ^x{Down}{Up}{Up}^v
+        if (SpaceCnt = 1){
+            send ^+; 
+            send +i
+            send ^{Enter} 
+        }else {
+            send ^x{Down}{Up}{Up}^v
+        }
     }else{
         Send !{Enter} 
     }
@@ -230,6 +236,14 @@ enter::
             send {Enter}
         }
     }else if (emode = SelectMode){
+        if (SpaceCnt = 1){
+            send ^+; 
+            send +d
+            send ^{Enter} 
+        }else {
+            send ^x{Down}{Up}{Down}^v
+        }
+    }else if (emode = LineSelectMode){
         send ^x{Down}{Up}{Down}^v
     }else{
         send {Enter} 
@@ -238,6 +252,10 @@ return
 
 Space::
     if (emode = CommandMode) {
+        SpaceCnt := 1
+    }else if (emode = SelectMode){
+        SpaceCnt := 1
+    }else if (emode = LineSelectMode){
         SpaceCnt := 1
     }else {
         send {Space}
@@ -295,13 +313,24 @@ return
 
 y::
     if (emode = CommandMode) {
-        send ^c 
+        Keywait, y 
+        Keywait, y, D, T0.1
+        if (ErrorLevel = 1){
+            send ^c 
+            cmode := NormalCopy
+        }else {
+            send +{Space} 
+            send ^c 
+            cmode := LineSelectCopy 
+        }
     }else if (emode = SelectMode){
         send ^c 
         emode := CommandMode
+        cmode := NormalCopy
     }else if (emode = LineSelectMode){
         send ^c 
         emode := CommandMode
+        cmode := LineSelectCopy 
     }else{
         send y 
     }
@@ -309,7 +338,16 @@ return
 
 p::
     if (emode = CommandMode) {
-        send ^v 
+        if (cmode = LineSelectCopy) {
+            send {Down}+{Space}
+            send ^+;
+            send ^c
+        }else {
+            send {Down}^+;
+            send +d 
+            send {Enter} 
+            send ^c 
+        }
     }else if (emode = SelectMode){
         send ^v 
     }else if (emode = LineSelectMode){
@@ -332,11 +370,9 @@ d::
         send +{Space} 
         send ^- 
     }else if (emode = SelectMode){
-        send {Delete} 
-        send {Up}
-        send {Down}
-        send {Esc}
-        emode := CommandMode
+        send ^- 
+        send +u
+        send ^{Enter} 
     }else if (emode = LineSelectMode){
         send ^- 
         send {Up}
@@ -345,6 +381,19 @@ d::
         emode := CommandMode
     }else{
         send d 
+    }
+return
+
++d::
+    if (emode = CommandMode) {
+    }else if (emode = SelectMode){
+        send ^- 
+        send +l
+        send ^{Enter}
+        emode := CommandMode
+    }else if (emode = LineSelectMode){
+    }else{
+        send +d 
     }
 return
 
@@ -358,7 +407,7 @@ x::
         send ^x
         emode := CommandMode
     }else{
-        send d 
+        send x
     }
 return
 
@@ -378,9 +427,21 @@ h::
             send {Left}
         }
     }else if (emode = SelectMode){
-        send +{Left}
+        if (SpaceCnt = 1){
+            send {End}
+            send +{Left}
+            SpaceCnt := 0 
+        }else{
+            send +{Left}
+        }
     }else if (emode = LineSelectMode){
-        send +{Left}
+        if (SpaceCnt = 1){
+            send {End}
+            send +{Left}
+            SpaceCnt := 0 
+        }else{
+            send +{Left}
+        }
     }else{
         send  h
         emode := InsertMode
@@ -397,9 +458,21 @@ j::
             send {Down}
         }
     }else if (emode = SelectMode){
-        send +{Down}
+        if (SpaceCnt = 1){
+            send {End}
+            send +{Down}
+            SpaceCnt := 0 
+        }else{
+            send +{Down}
+        }
     }else if (emode = LineSelectMode){
-        send +{Down}
+        if (SpaceCnt = 1){
+            send {End}
+            send +{Down}
+            SpaceCnt := 0 
+        }else{
+            send +{Down}
+        }
     }else{
         send j
         emode := InsertMode
@@ -416,9 +489,21 @@ k::
             send {Up}
         }
     }else if (emode = SelectMode){
-        send +{Up}
+        if (SpaceCnt = 1){
+            send {End}
+            send +{Up}
+            SpaceCnt := 0 
+        }else{
+            send +{Up}
+        }
     }else if (emode = LineSelectMode){
-        send +{Up}
+        if (SpaceCnt = 1){
+            send {End}
+            send +{Up}
+            SpaceCnt := 0 
+        }else{
+            send +{Up}
+        }
     }else{
         send k 
         emode := InsertMode
@@ -435,25 +520,160 @@ l::
             send {Right}
         }
     }else if (emode = SelectMode){
-        send +{Right}
+        if (SpaceCnt = 1){
+            send {End}
+            send +{Right}
+            SpaceCnt := 0 
+        }else{
+            send +{Right}
+        }
     }else if (emode = LineSelectMode){
-        send +{Right}
+        if (SpaceCnt = 1){
+            send {End}
+            send +{Right}
+            SpaceCnt := 0 
+        }else{
+            send +{Right}
+        }
     }else{
         send l 
         emode := InsertMode
     }
 return
 
+
++h::
+    if (emode = CommandMode) {
+        if (SpaceCnt = 1){
+            send {End}
+            send {Left}
+            SpaceCnt := 0 
+        }else{
+            send {Left}{Left}{Left}{Left}{Left}
+        }
+    }else if (emode = SelectMode){
+        if (SpaceCnt = 1){
+            send {End}
+            send +{Left}
+            SpaceCnt := 0 
+        }else{
+            send +{Left}+{Left}+{Left}+{Left}+{Left}
+        }
+    }else if (emode = LineSelectMode){
+        if (SpaceCnt = 1){
+            send {End}
+            send +{Left}
+            SpaceCnt := 0 
+        }else{
+            send +{Left}+{Left}+{Left}+{Left}+{Left}
+        }
+    }else{
+        send  +h
+        emode := InsertMode
+    }
+return
+
++j::
+    if (emode = CommandMode) {
+        if (SpaceCnt = 1){
+            send {End}
+            send {Down}
+            SpaceCnt := 0 
+        }else{
+            send {Down}{Down}{Down}{Down}{Down}
+        }
+    }else if (emode = SelectMode){
+        if (SpaceCnt = 1){
+            send {End}
+            send +{Down}
+            SpaceCnt := 0 
+        }else{
+            send +{Down}+{Down}+{Down}+{Down}+{Down}
+        }
+    }else if (emode = LineSelectMode){
+        if (SpaceCnt = 1){
+            send {End}
+            send +{Down}
+            SpaceCnt := 0 
+        }else{
+            send +{Down}+{Down}+{Down}+{Down}+{Down}
+        }
+    }else{
+        send +j
+        emode := InsertMode
+    }
+return
+
++k::
+    if (emode = CommandMode) {
+        if (SpaceCnt = 1){
+            send {End}
+            send {Up}
+            SpaceCnt := 0 
+        }else{
+            send {Up}{Up}{Up}{Up}{Up}
+        }
+    }else if (emode = SelectMode){
+        if (SpaceCnt = 1){
+            send {End}
+            send +{Up}
+            SpaceCnt := 0 
+        }else{
+            send +{Up}+{Up}+{Up}+{Up}+{Up}
+        }
+    }else if (emode = LineSelectMode){
+        if (SpaceCnt = 1){
+            send {End}
+            send +{Up}
+            SpaceCnt := 0 
+        }else{
+            send +{Up}+{Up}+{Up}+{Up}+{Up}
+        }
+    }else{
+        send +k 
+        emode := InsertMode
+    }
+return
+
++l::
+    if (emode = CommandMode) {
+        if (SpaceCnt = 1){
+            send {End}
+            send {Right}
+            SpaceCnt := 0 
+        }else{
+            send {Right}{Right}{Right}{Right}{Right}
+        }
+    }else if (emode = SelectMode){
+        if (SpaceCnt = 1){
+            send {End}
+            send +{Right}
+            SpaceCnt := 0 
+        }else{
+            send +{Right}+{Right}+{Right}+{Right}+{Right}
+        }
+    }else if (emode = LineSelectMode){
+        if (SpaceCnt = 1){
+            send {End}
+            send +{Right}
+            SpaceCnt := 0 
+        }else{
+            send +{Right}+{Right}+{Right}+{Right}+{Right}
+        }
+    }else{
+        send +l 
+        emode := InsertMode
+    }
+return
+
+
 Return
 #IfWinActive
 
 ;２連続入力に対応
-; ~i up::
-;   Input, iout, I T0.1 V L1, {i}
+; ~q up::
+;   Input, iout, I T0.1 V L1, {Q}
 ;   if(ErrorLevel == "EndKey:I"){
-;     SendInput, {BackSpace 2}
-;     Send, ^#{Left}
+;       MsgBox, [ Options, Title, Text, Timeout]
 ;   }
 ; Return
-
-
