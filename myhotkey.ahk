@@ -1,5 +1,9 @@
 
-;...
+global mode:=0
+
+; in all mode
+
+;
 ^G::send {BS}
 
 ;cursol move 
@@ -31,10 +35,15 @@ vk1D::Send ^#{Left}
 vk1C::Send ^#{Right}
 vk1D & f::Send #{Tab}
 
+#if mode = 0 
+#if
+
+#if mode = 1
+#if
 
 ; vscode
-#if WinActive("ahk_exe Code.exe")
-
+#if (WinActive("ahk_exe Code.exe"))
+#if
 
 ;２連続入力に対応
 ; ~i up::
