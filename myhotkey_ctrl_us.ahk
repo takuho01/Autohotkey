@@ -1,9 +1,7 @@
 
-; ChangeKeyを使用してCapsLockをF13にした場合
-; Caps2CtrlなどでCapsLockをCtrlにするとhjklを長押ししたときにhjklが入り込むバグを
-; 修正するため
+; ExcelでVimキーバインドを再現
+; caps lockではなく、ctrlを仕様するバージョン
 
-;---spjlekcial move---
 ; 変数定義は一番最初で実行しないと、謎のエラーが起きる
 global mode := 0
 global NormalMode := 0
